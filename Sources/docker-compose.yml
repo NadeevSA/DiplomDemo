@@ -1,0 +1,43 @@
+version: '3.9'
+services:
+    Microservice:
+       container_name: Microservice
+       image: microservice
+       stdin_open: true
+       expose: 
+       -  "80"
+       ports: 
+        - "300:80"
+    BFF:
+       container_name: BFF
+       image: bff
+       stdin_open: true
+       expose: 
+       -  "8083"
+       ports: 
+        - "8083:8083"
+    RabbitMQ:
+       container_name: RabbitMQ
+       image: rabbitmq
+       stdin_open: true
+       expose: 
+       -  "3000"
+       ports: 
+        - "3000:3000"
+    Front:
+       container_name: Front
+       image: front
+       volumes:
+        - ~/site-content:/usr/share/nginx/html nginx
+       ports: 
+        - "83:80"
+    Postgras:
+        container_name: Postgras
+        image: postgres:alpine
+        restart: always
+        environment:
+          - POSTGRES_DB=postgres
+          - POSTGRES_USER=postgres
+          - POSTGRES_PASSWORD=postgres
+        ports:
+          - "5432:5432"
