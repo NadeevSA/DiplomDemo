@@ -1,10 +1,11 @@
-using BFF.GraphQL;
+using System.Reflection;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace BFF
+namespace Request
 {
     public class Startup
     {
@@ -13,10 +14,8 @@ namespace BFF
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services
-                .AddGraphQLServer()
-                .AddQueryType<Query>();
-            services.AddInMemorySubscriptions();
+            services.AddSwaggerGen();
+            services.AddMediatR(Assembly.GetExecutingAssembly());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -26,15 +25,18 @@ namespace BFF
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseHttpsRedirection();
 
-            app.UseRouting();
+            app.UseSwagger();
 
-            app.UseWebSockets();
-
-            app.UseEndpoints(endpoints =>
+            app.UseSwaggerUI(c =>
             {
-                endpoints.MapGraphQL();
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
+            app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }
 }
