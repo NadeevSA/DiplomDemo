@@ -1,12 +1,12 @@
-﻿using System;
-using System.Text;
-using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
-using RabbitMQ.Client;
-
-namespace RabbitCommand.Rabbit.Sender
+﻿namespace RabbitCommand.Rabbit.Sender
 {
-    public class MqSender : IMqSender
+    using System;
+    using System.Text;
+    using Microsoft.Extensions.Configuration;
+    using Newtonsoft.Json;
+    using RabbitMQ.Client;
+
+    public class MqSender<T> : IMqSender<T>
     {
         private readonly string _hostname;
         private readonly string _password;
@@ -24,7 +24,7 @@ namespace RabbitCommand.Rabbit.Sender
             _password = configuration.GetSection("RabbitMq:Password").Value;
         }
 
-        public void Send(BaseCommand command)
+        public void Send(T command)
         {
             if (ConnectionExists())
             {

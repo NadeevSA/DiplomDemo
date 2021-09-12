@@ -1,7 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
+using Common.Models;
+using DesignTask.Commands;
+using DesignTask.Providers;
+using KnowledgeUberization.Providers;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -11,6 +17,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using RabbitCommand.Rabbit.Sender;
+using Unity;
+using Unity.Injection;
 
 namespace DesignTask
 {
@@ -31,6 +40,12 @@ namespace DesignTask
             {
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "DesignTask", Version = "v1"});
             });
+            
+            services.AddMediatR(Assembly.GetExecutingAssembly());
+        }
+        public void ConfigureContainer(IUnityContainer container)
+        {
+            UnityConfig.DoRegistration(container, Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

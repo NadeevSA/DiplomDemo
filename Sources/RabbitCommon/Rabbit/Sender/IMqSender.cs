@@ -1,7 +1,7 @@
 ﻿namespace RabbitCommand.Rabbit.Sender
 {
-    public interface IMqSender
+    public interface IMqSender<T>
     {
-        public void Send(BaseCommand command);
+        public void Send(T command);
     }
 }
