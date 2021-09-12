@@ -18,9 +18,19 @@ services:
       dockerfile: docker-request.Dockerfile
     stdin_open: true
     expose:
-      - "80"
+      - "82"
     ports:
-      - "82:80"
+      - "82:82"
+  design_task:
+    container_name: design_task
+    build:
+      context: ../../
+      dockerfile: docker-design_task.Dockerfile
+    stdin_open: true
+    expose:
+      - "85"
+    ports:
+      - "85:85"
   response:
     container_name: response
     build:
@@ -28,9 +38,9 @@ services:
       dockerfile: docker-response.Dockerfile
     stdin_open: true
     expose:
-      - "80"
+      - "84"
     ports:
-      - "84:80"
+      - "84:84"
   bff:
     container_name: bff
     build:
