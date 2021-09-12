@@ -1,0 +1,59 @@
+version: '3.9'
+services:
+  db:
+    volumes:
+      - ../../migrations/.:/docker-entrypoint-initdb.d/.
+    image: postgres:alpine
+    restart: always
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5432:5432"
+  request:
+    container_name: request
+    build:
+      context: ../../
+      dockerfile: docker-request.Dockerfile
+    stdin_open: true
+    expose:
+      - "80"
+    ports:
+      - "82:80"
+  response:
+    container_name: response
+    build:
+      context: ../../
+      dockerfile: docker-response.Dockerfile
+    stdin_open: true
+    expose:
+      - "80"
+    ports:
+      - "84:80"
+  bff:
+    container_name: bff
+    build:
+      context: ../../
+      dockerfile: docker-bff.Dockerfile
+    stdin_open: true
+    expose:
+      - "8084"
+    ports:
+      - "8084:8084"
+  front:
+    container_name: front
+    build:
+      context: ../../
+      dockerfile: docker-front.Dockerfile
+    volumes:
+      - ~/site-content:/usr/share/nginx/html nginx
+    ports:
+      - "83:80"
+  rabbitmq:
+    image: rabbitmq:management
+    command: rabbitmq-server
+    hostname: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"

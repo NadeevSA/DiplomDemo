@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Dapper;
-using Microservice.Models.Users;
+using Request.Models.Users;
 
-namespace Microservice.Providers
+namespace Request.Providers
 {
     public class UserProvider
     {

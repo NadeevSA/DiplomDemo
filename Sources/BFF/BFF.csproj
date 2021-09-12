@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Microservice\Microservice.csproj" />
+    <ProjectReference Include="..\Common\Common.csproj" />
   </ItemGroup>
-
+  
 </Project>

@@ -1,10 +1,21 @@
+FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build-env
+WORKDIR /app
+
+
+COPY BFF/. ./BFF/
+COPY Common/. ./Common/
+WORKDIR /app/BFF
+RUN dotnet restore
+
+
+ENV ASPNETCORE_URLS=http://+:8084 
+RUN dotnet publish BFF.csproj -c Release -o out
+
+
 FROM mcr.microsoft.com/dotnet/aspnet:5.0
-FROM mcr.microsoft.com/dotnet/sdk:5.0
-COPY BFF/bin/Release/net5.0/ App/
-WORKDIR /App
-ARG BUILD_CONFIGURATION=Release
-ENV ASPNETCORE_ENVIRONMENT=Development
-ENV DOTNET_USE_POLLING_FILE_WATCHER=true  
-ENV ASPNETCORE_URLS=http://+:8083  
-EXPOSE 8083
-ENTRYPOINT ["dotnet", "BFF.dll"]
+WORKDIR /app/BFF
+ENV ASPNETCORE_URLS=http://+:8084
+COPY --from=build-env /app/BFF/out/. .
+
+EXPOSE 8084
+ENTRYPOINT ["dotnet", "/app/BFF/BFF.dll"]

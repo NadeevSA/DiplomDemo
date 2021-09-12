@@ -1,14 +1,11 @@
+using System.Reflection;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace RabbitMQ
+namespace Request
 {
     public class Startup
     {
@@ -16,6 +13,9 @@ namespace RabbitMQ
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllers();
+            services.AddSwaggerGen();
+            services.AddMediatR(Assembly.GetExecutingAssembly());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -25,16 +25,18 @@ namespace RabbitMQ
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseHttpsRedirection();
 
-            app.UseRouting();
+            app.UseSwagger();
 
-            app.UseEndpoints(endpoints =>
+            app.UseSwaggerUI(c =>
             {
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("Hello rabbitUPD!");
-                });
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
+            app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }
 }

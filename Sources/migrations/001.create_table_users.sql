@@ -5,6 +5,7 @@
 );
 
 INSERT INTO Users (name, age) values
-        ('TestUser', 20)
-        ('ivan', 30),
+        ('TestUser', 20),
+        ('ivan', 30);
 
+ 

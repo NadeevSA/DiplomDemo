@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
+﻿using System.Data;
 using System.Threading.Tasks;
 
-namespace Microservice.Providers
+namespace Request.Providers
 {
     public interface IDbConnector
     {
